@@ -8,6 +8,10 @@ import 'package:auto_diary3/HomePage.dart';
 //TODO : make group for each month
 //TODO : try calendar view without headers.
 //TODO : get location from photo
+//TODO : change layout of screen2.
+//TODO : change layout of screen2 : remove filename
+//TODO : change layout of screen2 : add timeline
+//TODO : change layout of screen2 : make image size bigger.
 
 void main() => runApp(MyApp());
 

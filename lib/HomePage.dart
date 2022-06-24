@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:auto_diary3/ImageCollector.dart';
 
@@ -13,14 +11,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-
-  // var imageCollector = new ImageCollector();
   var files;
   var dates;
 
   void initState() {
     getFiles(); //call getFiles() function on initial state.
-    // getDateFromFiles();
     super.initState();
   }
 
@@ -36,13 +31,11 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
       ),
       child: FlatButton(
-        // color: Colors.red,
         padding: EdgeInsets.all(5),
         height: 20,
         child: Text("$date"),
         onPressed: () {
           Navigator.pushNamed(context, '/second', arguments: {'date': text});
-          // Navigator.push(context, Material)
         },
       ),
     );
@@ -72,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       dateList.add(files[i].toString().split('/')[4].substring(0, 8));
     }
     dates = dateList.toSet().toList();
-    print(dates);
 
     setState(() {}); //update the UI
   }
@@ -122,7 +114,6 @@ class _HomePageState extends State<HomePage> {
               ]),
             ),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        // imageCollector.getDateFromFiles();
         Navigator.pushNamed(context, '/second');
       }),
     );
