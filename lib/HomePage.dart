@@ -3,7 +3,7 @@ import 'package:auto_diary3/ImageCollector.dart';
 
 import 'dart:io';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -45,6 +45,11 @@ class _HomePageState extends State<HomePage> {
     //asyn function to get list of files
     // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
     var root = '/sdcard/DCIM/Camera';
     var fm = FileManager(root: Directory(root)); //
     files = await fm.filesTree(
@@ -56,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         ] //optional, to filter files, remove to list all,
         );
 
-    files = files.where((item) => item.toString().contains('2019')).toList();
+    files = files.where((item) => item.toString().contains('2022')).toList();
     // print(files[0].toString().contains('20190929_'));
     // files = files.where((item)=> item.startsWith('20190929_')).toList();
     // print(files);

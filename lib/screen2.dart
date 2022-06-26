@@ -151,9 +151,9 @@ Widget ImageRow(String time, List<File> fileList, List<String> times) {
   // print(fileList);
   // print(times);
   var list = [];
-  ;
+
   for (int i = 0; i < times.length; i++) {
-    if (times[i].contains(time)) {
+    if (times[i].startsWith(time)) {
       list.add(i);
       print('$time, $i added');
     }
