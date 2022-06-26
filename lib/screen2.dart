@@ -31,7 +31,9 @@ class _MyFileList extends State<MyFileList> {
   // _MyFileList({Key key, @required this.date}) : super(key: key);
 
   var files;
+  List<String> times = [];
   var permissionGranted = false;
+
   // final date;
 
   Future _getStoragePermission() async {
@@ -66,6 +68,16 @@ class _MyFileList extends State<MyFileList> {
     // files = files.where((item)=> item.startsWith('20190929_')).toList();
 
     print('$date, files : $files');
+
+    // times = files.where((item)=>item.toString().split('_')[-1].substring(0, 6)).toList();
+    for (int i = 0; i < files.length; i++) {
+      var time = files[i].toString().split('_')[1].substring(0, 6);
+      times.add(time);
+      // times.add(files[0]);
+      // print(files.length);
+      print(i);
+    }
+    print('time : $times');
     setState(() {}); //update the UI
   }
 
@@ -94,43 +106,64 @@ class _MyFileList extends State<MyFileList> {
             : Row(
                 children: [
                   SizedBox(width: kLeftGap),
-                  Column(children: [
-                   TimelineContainer(Colors.blue, kTimelineWidth, kTimelineHeight),
-                    TimelineContainer(Colors.red, kTimelineWidth, kTimelineHeight),
-                  ]),
-
-                  Row(
-                    children: [
-                      Image.file(files[0],
-                          height: kImageHeight, width: kImageWidth)
-                    ],
-                  ),
-                  //
-                  // Expanded(
-                  //   child : ListView.builder(
-                  //     itemCount: files?.length ?? 0,
-                  //     itemBuilder: (context, index) {
-                  //       return Card(
-                  //           child: ListTile(
-                  //             leading: Image.file(files[index]), //Icon(Icons.image),
-                  //           ));
-                  //     },
-                  //   ),
-                  // )
+                  Column(children: [TimelineContainerList(ktimeline)]),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(ktimeline.length, (index) {
+                      return ImageRow(
+                          ktimeline[index].toString(), files, times);
+                    }),
+                  )
                 ],
               ));
   }
 }
 
-Widget TimelineContainer(Color color, double width, double height) {
+Widget TimelineContainerList(List timeline) {
+  return Column(
+      children: List.generate(timeline.length, (index) {
+    return TimelineContainer(
+        int.parse(timeline[index]) > 13 ? Colors.blue : Colors.red,
+        kTimelineWidth,
+        kTimelineHeight / timeline.length,
+        index);
+  }));
+}
+
+Widget TimelineContainer(Color color, double width, double height, index) {
+  var time = ktimeline[index];
   return Container(
 // flex: 2,
     width: width,
     height: height,
+    child: Text("$time"),
     decoration: BoxDecoration(
-      color: color,
-      shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-    ),
+        color: color,
+        shape: BoxShape.rectangle,
+        borderRadius: index == 0
+            ? BorderRadius.only(
+                topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0))
+            : null),
   );
+}
+
+Widget ImageRow(String time, List<File> fileList, List<String> times) {
+  // print(fileList);
+  // print(times);
+  var list = [];
+  ;
+  for (int i = 0; i < times.length; i++) {
+    if (times[i].contains(time)) {
+      list.add(i);
+      print('$time, $i added');
+    }
+  }
+
+  return Row(
+      children: list.length != 0
+          ? List.generate(list.length, (index) {
+              return Image.file(fileList[list[index]],
+                  height: kImageHeight, width: kImageWidth);
+            })
+          : [SizedBox(height: kImageHeight)]);
 }

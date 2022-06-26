@@ -1,6 +1,7 @@
 
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'dart:io';
+import 'package:ml_dataframe/ml_dataframe.dart';
 
 
 class ImageCollector {
@@ -16,9 +17,10 @@ class ImageCollector {
     // this.getDateFromFiles();
   }
 
-  void init() async{
+  void init() async {
     this.getAllFiles();
-
+    DataFrame df = DataFrame([files_all]);
+    print("df: $df");
   }
 
 
@@ -33,40 +35,27 @@ class ImageCollector {
           "jpg"
         ] //optional, to filter files, remove to list all,
     );
-    files_all = await files_all.where((item)=> item.toString().contains('2019')).toList();
+    files_all =  files_all.where((item) => item.toString().contains('2019')).toList();
+    print("files all $files_all");
 
   }
 
-  void getDateFromFiles() async {
-    var dateList = [];
-    print('files_all = $files_all.length');
-    for( var i = 0; i < files_all.length; i++){
-      dateList.add(files_all[i].toString().split('/')[4].substring(0, 8));
-    }
-    dates = await dateList.toSet().toList();
+
+}
+
+
+class ImagesSortByDate {
+
+  ImagesSortByDate(String date) {
+
   }
 
-  void filterFiles(String keyword) {
-    files_filtered = [];
-    files_filtered =
-        files_all.where((item) => item.toString().contains('$keyword')).toList();
-  }
+}
 
+class ImagesSortByTime{
 
-  void getFiles(String keyword) async {
-    var root = '/sdcard/DCIM/Camera';
-    var fm = FileManager(root: Directory(root)); //
-    files = await fm.filesTree(
-      //set fm.dirsTree() for directory/folder tree list
-      //   excludedPaths: ["/storage/emulated/0/Android"],
-        extensions: [
-          "png",
-          "jpg"
-        ] //optional, to filter files, remove to list all,
-      //remove this if your are grabbing folder list
-    );
+}
 
-    files_string = files.where((item) => item.toString().contains('$keyword')).toList();
-  }
+class ImagesSortByMonth{
 
 }

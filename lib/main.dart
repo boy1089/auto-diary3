@@ -3,21 +3,32 @@ import 'package:flutter/widgets.dart';
 
 import 'package:auto_diary3/screen2.dart';
 import 'package:auto_diary3/HomePage.dart';
+import 'package:auto_diary3/ImageCollector.dart';
+// import 'pakage:permission_handler/permission_handler.dart';
 
+//TODO : make dataframe to handle image effectively.
 //TODO : make griditems and put the number of photos of each day
 //TODO : make group for each month
 //TODO : try calendar view without headers.
+//TODO : create class with image info
+//TODO : create SQL to save th info
+//TODO : create jpg to save the images.
+
+//TODO : organize the info from photo -- time, location
 //TODO : get location from photo
-//TODO : change layout of screen2.
-//TODO : change layout of screen2 : remove filename
-//TODO : change layout of screen2 : add timeline
-//TODO : change layout of screen2 : make image size bigger.
+
+//TODO : change hard coded values.
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  var a = ImageCollector();
   @override
   Widget build(BuildContext context) {
+    // var status = await Permission.storage.status;
+    // if (!status.isGranted) {
+    //   await Permission.storage.request();
+    // }
     return MaterialApp(
         home: MyFileList(date: "202210"), //call MyFile List
         initialRoute: '/home',
