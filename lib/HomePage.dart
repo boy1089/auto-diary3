@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:auto_diary3/ImageCollector.dart';
+import 'package:auto_diary3/Images.dart';
 
 import 'dart:io';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -11,8 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  var images = Images();
   var files;
   var dates;
+
 
   void initState() {
     getFiles(); //call getFiles() function on initial state.
@@ -53,8 +57,6 @@ class _HomePageState extends State<HomePage> {
     var root = '/sdcard/DCIM/Camera';
     var fm = FileManager(root: Directory(root)); //
     files = await fm.filesTree(
-        //set fm.dirsTree() for directory/folder tree list
-        //   excludedPaths: ["/storage/emulated/0/Android"],
         extensions: [
           "png",
           "jpg"
@@ -62,15 +64,11 @@ class _HomePageState extends State<HomePage> {
         );
 
     files = files.where((item) => item.toString().contains('2022')).toList();
-    // print(files[0].toString().contains('20190929_'));
-    // files = files.where((item)=> item.startsWith('20190929_')).toList();
-    // print(files);
     var dateList = [];
     for (var i = 0; i < files.length; i++) {
       dateList.add(files[i].toString().split('/')[4].substring(0, 8));
     }
     dates = dateList.toSet().toList();
-
     setState(() {}); //update the UI
   }
 
@@ -119,7 +117,7 @@ class _HomePageState extends State<HomePage> {
               ]),
             ),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.pushNamed(context, '/second');
+        images.updateState();
       }),
     );
   }

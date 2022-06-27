@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:auto_diary3/screen2.dart';
 import 'package:auto_diary3/HomePage.dart';
-import 'package:auto_diary3/ImageCollector.dart';
+import 'package:auto_diary3/Images.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 //TODO : create class with image info
@@ -25,7 +25,7 @@ import 'package:permission_handler/permission_handler.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  var a = ImageCollector();
+
 
   @override
   Widget build(BuildContext context) {
