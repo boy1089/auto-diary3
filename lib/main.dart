@@ -6,11 +6,14 @@ import 'package:auto_diary3/HomePage.dart';
 import 'package:auto_diary3/ImageCollector.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+//TODO : create class with image info
+
+//TODO : try calendar view without headers.
+//TODO : make group for each month
+
+
 //TODO : make dataframe to handle image effectively.
 //TODO : make griditems and put the number of photos of each day
-//TODO : make group for each month
-//TODO : try calendar view without headers.
-//TODO : create class with image info
 //TODO : create SQL to save th info
 //TODO : create jpg to save the images.
 
