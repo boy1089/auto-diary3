@@ -8,6 +8,10 @@
 //   List<String> pathOfImages;
 // }
 
+var kRoot = '/sdcard/DCIM/Camera';
+// var kRoot = '/sdcard/DCIM';
+// var kRoot = '/document/primary:DCIM';
+
 
 const double kImageHeight = 35.2;
 const double kImageWidth = 35.2;

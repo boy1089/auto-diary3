@@ -6,11 +6,8 @@ import 'package:auto_diary3/HomePage.dart';
 import 'package:auto_diary3/Images.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-//TODO : create class with image info
 
 //TODO : try calendar view without headers.
-//TODO : make group for each month
-
 
 //TODO : make dataframe to handle image effectively.
 //TODO : make griditems and put the number of photos of each day
@@ -25,13 +22,10 @@ import 'package:permission_handler/permission_handler.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-        home: MyFileList(date: "202210"), //call MyFile List
+        // home: MyFileList(date: "202210"), //call MyFile List
         initialRoute: '/home',
         routes: {
           '/home': (context) => HomePage(),

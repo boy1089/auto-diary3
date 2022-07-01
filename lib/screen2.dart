@@ -8,12 +8,6 @@ import 'package:auto_diary3/util.dart';
 
 //apply this class on home: attribute at MaterialApp()
 class MyFileList extends StatefulWidget {
-  // var date;
-
-  // MyFileList(var date){
-  //   date = date;
-  // }
-  //
   final String date;
   MyFileList({required this.date});
 
@@ -45,11 +39,10 @@ class _MyFileList extends State<MyFileList> {
   }
 
   void getFiles() async {
-    //asyn function to get list of files
     // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    var root = '/sdcard/DCIM/Camera';
-    var fm = FileManager(root: Directory(root)); //
+    // var kRoot = '/sdcard/DCIM/Camera';
+    var fm = FileManager(root: Directory(kRoot)); //
     files = await fm.filesTree(
         //set fm.dirsTree() for directory/folder tree list
         //   excludedPaths: ["/storage/emulated/0/Android"],
@@ -57,24 +50,16 @@ class _MyFileList extends State<MyFileList> {
           "png",
           "jpg"
         ] //optional, to filter files, remove to list all,
-        //remove this if your are grabbing folder list
         );
-
-    // files = files.where((item)=> item.toString().contains('$date')).toList();
 
     var date = this.date.toString();
     files = files.where((item) => item.toString().contains('$date')).toList();
-    // print(files[0].toString().contains('20190929_'));
-    // files = files.where((item)=> item.startsWith('20190929_')).toList();
 
     print('$date, files : $files');
 
-    // times = files.where((item)=>item.toString().split('_')[-1].substring(0, 6)).toList();
     for (int i = 0; i < files.length; i++) {
       var time = files[i].toString().split('_')[1].substring(0, 6);
       times.add(time);
-      // times.add(files[0]);
-      // print(files.length);
       print(i);
     }
     print('time : $times');
@@ -162,8 +147,10 @@ Widget ImageRow(String time, List<File> fileList, List<String> times) {
   return Row(
       children: list.length != 0
           ? List.generate(list.length, (index) {
+                // return Image.file(fileList[list[index]],
+
               return Image.file(fileList[list[index]],
-                  height: kImageHeight, width: kImageWidth);
+                  height: kImageHeight, width: kImageWidth, );
             })
           : [SizedBox(height: kImageHeight)]);
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'dart:io';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:auto_diary3/util.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // TODO : sort image. by year, by month, by date
 // TODO : get all files, --> filesAll
@@ -13,21 +15,31 @@ class Images {
   List<File> filesAll = [];
   List<String> years = [];
   List<String> months = [];
-  List<String> dates = [];
-
+  var dates;
+  List<String> numberOfFiles= [];
   Images() {
-    getFiles();
-    years = getYearFromFiles();
-    months = getMonthFromFiles();
-    dates = getDateFromFiles();
+    updateState();
   }
 
-  void updateState() {
+  var permissionGranted = false;
+
+  // final date;
+
+  Future _getStoragePermission() async {
+    if (await Permission.storage.request().isGranted) {
+
+        permissionGranted = true;
+    }
+  }
+  void updateState() async {
     getFiles();
     years = getYearFromFiles();
     months = getMonthFromFiles();
     dates = getDateFromFiles();
+    numberOfFiles = getNumberOfFiles(dates);
+
     print('$years, $months, $dates');
+    print('$numberOfFiles');
   }
 
   // List<File> getFilesAll() {return filesAll;}
@@ -35,18 +47,22 @@ class Images {
   // List<String> getMonths() {return years;}
   // List<String> getDates() {return years;}
 
-  void getFiles() async {
+  Future<List<File>> getFiles() async {
     //asyn function to get list of files
     // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    var root = '/sdcard/DCIM/Camera';
-    var fm = FileManager(root: Directory(root)); //
-    filesAll = await fm.filesTree(extensions: [
+    // var kRoot = '/sdcard/DCIM/Camera';
+    print(kRoot);
+    var fm = FileManager(root: Directory(kRoot)); //
+    var b;
+    b = fm.filesTree(extensions: [
       "png",
       "jpg"
     ] //optional, to filter files, remove to list all,
         );
 
+    filesAll = await b;
+    return b;
   }
 
   List<File> sortFilesByDate(String date) {
@@ -83,4 +99,13 @@ class Images {
     }
     return dateFromFilename.toSet().toList();
   }
+  List<String> getNumberOfFiles(List<String> dates) {
+    List<String> numberOfFiles = [];
+    for (int i = 0; i < dates.length; i++) {
+      numberOfFiles.add(sortFilesByDate(dates[i]).length.toString());
+    }
+    print("numberOfFiles : $numberOfFiles");
+    return numberOfFiles;
+  }
+
 }
