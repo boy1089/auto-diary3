@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:auto_diary3/util.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image/image.dart' as Image;
+import 'package:path_provider/path_provider.dart';
+// import ''
 
 // TODO : sort image. by year, by month, by date
 // TODO : get all files, --> filesAll
@@ -16,6 +19,7 @@ class Images {
   List<String> years = [];
   List<String> months = [];
   var dates;
+
   List<String> numberOfFiles= [];
   Images() {
     updateState();
@@ -42,10 +46,6 @@ class Images {
     print('$numberOfFiles');
   }
 
-  // List<File> getFilesAll() {return filesAll;}
-  // List<String> getYears() {return years;}
-  // List<String> getMonths() {return years;}
-  // List<String> getDates() {return years;}
 
   Future<List<File>> getFiles() async {
     //asyn function to get list of files
@@ -53,7 +53,8 @@ class Images {
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
     // var kRoot = '/sdcard/DCIM/Camera';
     print(kRoot);
-    var fm = FileManager(root: Directory(kRoot)); //
+    // var fm = FileManager(root: Directory(kRoot)); //
+    var fm = FileManager(root: Directory(await _localPath));
     var b;
     b = fm.filesTree(extensions: [
       "png",
@@ -62,9 +63,29 @@ class Images {
         );
 
     filesAll = await b;
+    print(filesAll);
     return b;
   }
+  //
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
 
+
+  void convertPngToJpg() async {
+    for(int i = 0; i<filesAll.length; i++){
+
+      final image = await Image.decodeImage(filesAll[i].readAsBytesSync())!;
+      final thumbnail = Image.copyResize(image, width: 300);
+      final path = await _localPath;
+      var file = filesAll[i].toString().split('/').last.substring(0, filesAll[i].toString().split('/').last.length - 1);
+      print('processing $i th image : $path, $file');
+      File('$path//$file').writeAsBytesSync(Image.encodePng(thumbnail));
+
+    }
+
+  }
   List<File> sortFilesByDate(String date) {
     var filesSortByDate;
     filesSortByDate =
@@ -77,7 +98,7 @@ class Images {
     List<String> yearFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       yearFromFilename
-          .add(filesAll[i].toString().split('/')[4].substring(0, 4));
+          .add(filesAll[i].toString().split('/').last.substring(0, 4));
     }
     return yearFromFilename.toSet().toList();
   }
@@ -86,7 +107,7 @@ class Images {
     List<String> monthFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       monthFromFilename
-          .add(filesAll[i].toString().split('/')[4].substring(0, 6));
+          .add(filesAll[i].toString().split('/').last.substring(0, 6));
     }
     return monthFromFilename.toSet().toList();
   }
@@ -95,7 +116,7 @@ class Images {
     List<String> dateFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       dateFromFilename
-          .add(filesAll[i].toString().split('/')[4].substring(0, 8));
+          .add(filesAll[i].toString().split('/').last.substring(0, 8));
     }
     return dateFromFilename.toSet().toList();
   }

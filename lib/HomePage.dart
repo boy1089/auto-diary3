@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
 
 
       floatingActionButton: FloatingActionButton(onPressed: () {
+        images.convertPngToJpg();
         images.updateState();
         setState((){dates = images.dates;
         numberOfFiles = images.numberOfFiles;});

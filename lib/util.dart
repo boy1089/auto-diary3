@@ -9,6 +9,7 @@
 // }
 
 var kRoot = '/sdcard/DCIM/Camera';
+// var kRoot = '/sdcard/DCIM/Camera';
 // var kRoot = '/sdcard/DCIM';
 // var kRoot = '/document/primary:DCIM';
 

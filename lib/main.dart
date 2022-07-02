@@ -6,13 +6,18 @@ import 'package:auto_diary3/HomePage.dart';
 import 'package:auto_diary3/Images.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+//TODO : location
+//TODO : make new page -- enable locatio logging.
+//TODO : make folder with location data.
+//TODO : read location data, apply it to screen2
+//TODO : read locaiton data, apply it to home page.
+
 
 //TODO : try calendar view without headers.
 
-//TODO : make dataframe to handle image effectively.
-//TODO : make griditems and put the number of photos of each day
+//TODO : make scroll enabled in homepage
+
 //TODO : create SQL to save th info
-//TODO : create jpg to save the images.
 
 //TODO : organize the info from photo -- time, location
 //TODO : get location from photo
