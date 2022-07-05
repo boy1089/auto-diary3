@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'dart:io';
-import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:auto_diary3/util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as Image;
 import 'package:path_provider/path_provider.dart';
@@ -16,6 +14,8 @@ import 'package:path_provider/path_provider.dart';
 
 class Images {
   List<File> filesAll = [];
+  List<File> filesAll_Camera = [];
+
   List<String> years = [];
   List<String> months = [];
   var dates;
@@ -37,6 +37,7 @@ class Images {
   }
   void updateState() async {
     getFiles();
+    getFilesFromCamera();
     years = getYearFromFiles();
     months = getMonthFromFiles();
     dates = getDateFromFiles();
@@ -51,7 +52,7 @@ class Images {
     //asyn function to get list of files
     // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    // var kRoot = '/sdcard/DCIM/Camera';
+    var kRoot = '/sdcard/DCIM/Camera';
     print(kRoot);
     // var fm = FileManager(root: Directory(kRoot)); //
     var fm = FileManager(root: Directory(await _localPath));
@@ -73,15 +74,49 @@ class Images {
   }
 
 
-  void convertPngToJpg() async {
-    for(int i = 0; i<filesAll.length; i++){
+  Future<List<File>> getFilesFromCamera() async {
+    //asyn function to get list of files
+    // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
+    // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+    var kRoot = '/sdcard/DCIM/Camera';
+    print(kRoot);
+    var fm = FileManager(root: Directory(kRoot)); //
+    // var fm = FileManager(root: Directory(await _localPath));
+    var b;
+    b = fm.filesTree(extensions: [
+      "png",
+      "jpg"
+    ] //optional, to filter files, remove to list all,
+    );
 
-      final image = await Image.decodeImage(filesAll[i].readAsBytesSync())!;
-      final thumbnail = Image.copyResize(image, width: 300);
+    filesAll_Camera = await b;
+    print(filesAll_Camera);
+    return b;
+  }
+  //
+
+
+  void convertPngToJpg() async {
+
+    int totalNumberofFiles = filesAll_Camera.length;
+
+    for(int i = 0; i<filesAll_Camera.length; i++){
+
       final path = await _localPath;
-      var file = filesAll[i].toString().split('/').last.substring(0, filesAll[i].toString().split('/').last.length - 1);
-      print('processing $i th image : $path, $file');
-      File('$path//$file').writeAsBytesSync(Image.encodePng(thumbnail));
+      var file_name = filesAll_Camera[i].toString().split('/').last.substring(0, filesAll_Camera[i].toString().split('/').last.length - 1);
+      print(file_name);
+      File file = await new File('$path/$file_name');
+
+      if(await file.exists()==true) {
+        print('exists!');
+        continue;}
+
+      final image = await Image.decodeImage(filesAll_Camera[i].readAsBytesSync())!;
+      final thumbnail = Image.copyResize(image, width: 300);
+
+      print('processing $i / $totalNumberofFiles th image : $path, $file');
+      file.writeAsBytesSync(Image.encodePng(thumbnail));
+
 
     }
 

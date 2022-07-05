@@ -57,7 +57,9 @@ dev_dependencies:
   glob:
   ml_dataframe:
   image: ^3.2.0
-
+  geolocator:
+  geocoding:
+  df:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
