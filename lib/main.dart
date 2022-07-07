@@ -7,13 +7,11 @@ import 'package:auto_diary3/HomePage.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:auto_diary3/SettingPage.dart';
 
-//TODO : location
-//TODO : classify with date.
+//TODO : refactor
 
 //TODO : make new page -- enable locatio logging.
 //TODO : read location data, apply it to screen2
 
-//TODO : refactor
 
 
 

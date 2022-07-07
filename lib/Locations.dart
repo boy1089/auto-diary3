@@ -70,7 +70,7 @@ class Locations {
     print('location, getMostFreq~~AllDate, $dates');
 
     for(int i = 0; i< dates.length-1; i++){
-      print('getMost $i / ${dates.length}');
+      // print('getMost $i / ${dates.length}');
       String freqLocation = await getMostFrequentLocation(filesAll[i].path);
       freqLocationList.add(freqLocation);
 

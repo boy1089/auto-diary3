@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,6 +44,7 @@ class Images {
 
     print('$years, $months, $dates');
     print('$numberOfFiles');
+
   }
 
 
@@ -52,13 +52,14 @@ class Images {
     //asyn function to get list of files
     // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
     // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    var kRoot = '/sdcard/DCIM/Camera';
-    print(kRoot);
+    // var kRoot = '/sdcard/DCIM/Camera';
+    // print(kRoot);
     // var fm = FileManager(root: Directory(kRoot)); //
+
     var fm = FileManager(root: Directory(await _localPath));
     var b;
     b = fm.filesTree(extensions: [
-      "png",
+      // "png",
       "jpg"
     ] //optional, to filter files, remove to list all,
         );
@@ -81,7 +82,6 @@ class Images {
     var kRoot = '/sdcard/DCIM/Camera';
     print(kRoot);
     var fm = FileManager(root: Directory(kRoot)); //
-    // var fm = FileManager(root: Directory(await _localPath));
     var b;
     b = fm.filesTree(extensions: [
       "png",
