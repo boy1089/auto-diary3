@@ -1,6 +1,7 @@
 
 
 
+import 'package:flutter/material.dart';
 
 // Object Date{
 //   String date;
@@ -16,7 +17,19 @@ var kRoot = '/sdcard/DCIM/Camera';
 
 const double kImageHeight = 35.2;
 const double kImageWidth = 35.2;
-
+List<Color> kColorsForLocations = [
+  Colors.blue,
+  Colors.green,
+  Colors.lightGreen,
+  Colors.cyanAccent,
+  Colors.pinkAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+];
 
 const double kTimelineHeight = 600;
 const double kTimelineWidth = 10;

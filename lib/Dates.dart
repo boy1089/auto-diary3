@@ -1,7 +1,17 @@
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:auto_diary3/Images.dart';
 
+import 'package:flutter/foundation.dart';
 class Dates {
+  var dates;
+  Dates(Images images){
+    debugPrint('dates initializing Dates');
+    dates= getDateRange(images.dates.first, images.dates.last);
+    debugPrint('dates initialization done ');
+
+  }
 
   List<String> getDateRange(String start, String end){
   var date_start = DateTime.parse(start);

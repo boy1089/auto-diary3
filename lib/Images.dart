@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as Image;
 import 'package:path_provider/path_provider.dart';
-// import ''
+import 'package:flutter/foundation.dart';
 
+import 'package:intl/intl.dart';
 // TODO : sort image. by year, by month, by date
 // TODO : get all files, --> filesAll
 //TODO : sort filesSortByYear, filesSortByMonth, filesSortByDate
@@ -12,15 +13,19 @@ import 'package:path_provider/path_provider.dart';
 //TODO : class - get files, def so
 
 class Images {
+
   List<File> filesAll = [];
   List<File> filesAll_Camera = [];
 
   List<String> years = [];
   List<String> months = [];
+  var datesRange;
   var dates;
 
-  List<String> numberOfFiles= [];
+  List<String> numberOfFiles = [];
+
   Images() {
+    debugPrint('Image instance is created');
     updateState();
   }
 
@@ -30,97 +35,102 @@ class Images {
 
   Future _getStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
-
-        permissionGranted = true;
+      permissionGranted = true;
     }
   }
-  void updateState() async {
-    getFiles();
-    getFilesFromCamera();
-    years = getYearFromFiles();
-    months = getMonthFromFiles();
-    dates = getDateFromFiles();
-    numberOfFiles = getNumberOfFiles(dates);
 
-    print('$years, $months, $dates');
-    print('$numberOfFiles');
+  void updateState() async {
+    debugPrint('Image class : getting files from app folder');
+    filesAll = await getFiles();
+    debugPrint('Image class : getting files from app folder : done, $filesAll');
+    debugPrint('Image class : getting files from camera folder');
+    getFilesFromCamera();
+    debugPrint('Image class : getting files from camera folder : done');
+
+    years = getYearFromFiles(filesAll);
+    months = getMonthFromFiles(filesAll);
+    dates = getDateFromFiles(filesAll);
+    numberOfFiles = getNumberOfFiles(dates);
+    datesRange = getDateRange(filesAll);
+
+    debugPrint('image class : datesRange : $datesRange');
+    debugPrint('Image class : dates are collected : $years, $months, $dates');
+    debugPrint('Image class : number of files : $numberOfFiles');
+
+    filesAll = List.from(filesAll.reversed);
+    dates = List.from(dates.reversed);
+    numberOfFiles = List.from(numberOfFiles.reversed);
+    datesRange = List.from(datesRange.reversed);
+    // List<String> reverseOrder (List<String> list) async {
+    //   return List.from(list.reversed);
+    // }
+    //
 
   }
 
+  void printStatus() {
+    debugPrint("Image class, filesAll : $filesAll");
+    debugPrint("Image class, years : $years");
+    debugPrint("Image class, months : $months");
+    debugPrint("Image class, dates : $dates");
+    debugPrint("Image class, number of files : $numberOfFiles");
+    debugPrint('image class : datesRange : $datesRange');
+  }
 
   Future<List<File>> getFiles() async {
-    //asyn function to get list of files
-    // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
-    // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    // var kRoot = '/sdcard/DCIM/Camera';
-    // print(kRoot);
-    // var fm = FileManager(root: Directory(kRoot)); //
-
     var fm = FileManager(root: Directory(await _localPath));
     var b;
     b = fm.filesTree(extensions: [
       // "png",
       "jpg"
-    ] //optional, to filter files, remove to list all,
-        );
-
-    filesAll = await b;
-    print(filesAll);
+    ]);
     return b;
   }
-  //
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
 
-
   Future<List<File>> getFilesFromCamera() async {
-    //asyn function to get list of files
-    // List<StorageInfo> storageInfo = await PathProvider.getStorageInfo();
-    // var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
     var kRoot = '/sdcard/DCIM/Camera';
-    print(kRoot);
     var fm = FileManager(root: Directory(kRoot)); //
     var b;
     b = fm.filesTree(extensions: [
       "png",
       "jpg"
     ] //optional, to filter files, remove to list all,
-    );
+        );
 
     filesAll_Camera = await b;
-    print(filesAll_Camera);
     return b;
   }
   //
 
-
   void convertPngToJpg() async {
-
     int totalNumberofFiles = filesAll_Camera.length;
 
-    for(int i = 0; i<filesAll_Camera.length; i++){
-
+    for (int i = 0; i < filesAll_Camera.length; i++) {
       final path = await _localPath;
-      var file_name = filesAll_Camera[i].toString().split('/').last.substring(0, filesAll_Camera[i].toString().split('/').last.length - 1);
+      var file_name = filesAll_Camera[i].toString().split('/').last.substring(
+          0, filesAll_Camera[i].toString().split('/').last.length - 1);
       print(file_name);
       File file = await new File('$path/$file_name');
 
-      if(await file.exists()==true) {
+      if (await file.exists() == true) {
         print('exists!');
-        continue;}
+        continue;
+      }
 
-      final image = await Image.decodeImage(filesAll_Camera[i].readAsBytesSync())!;
+      final image =
+          await Image.decodeImage(filesAll_Camera[i].readAsBytesSync())!;
       final thumbnail = Image.copyResize(image, width: 300);
 
       print('processing $i / $totalNumberofFiles th image : $path, $file');
       file.writeAsBytesSync(Image.encodePng(thumbnail));
-
-
     }
-
   }
+
   List<File> sortFilesByDate(String date) {
     var filesSortByDate;
     filesSortByDate =
@@ -129,7 +139,7 @@ class Images {
     return filesSortByDate;
   }
 
-  List<String> getYearFromFiles() {
+  List<String> getYearFromFiles(filesAll) {
     List<String> yearFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       yearFromFilename
@@ -138,30 +148,54 @@ class Images {
     return yearFromFilename.toSet().toList();
   }
 
-  List<String> getMonthFromFiles() {
+  List<String> getMonthFromFiles(filesAll) {
     List<String> monthFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       monthFromFilename
           .add(filesAll[i].toString().split('/').last.substring(0, 6));
     }
+
     return monthFromFilename.toSet().toList();
   }
 
-  List<String> getDateFromFiles() {
+  List<String> getDateFromFiles(filesAll) {
     List<String> dateFromFilename = [];
     for (int i = 0; i < filesAll.length; i++) {
       dateFromFilename
           .add(filesAll[i].toString().split('/').last.substring(0, 8));
     }
+
     return dateFromFilename.toSet().toList();
   }
+
   List<String> getNumberOfFiles(List<String> dates) {
     List<String> numberOfFiles = [];
     for (int i = 0; i < dates.length; i++) {
       numberOfFiles.add(sortFilesByDate(dates[i]).length.toString());
     }
-    print("numberOfFiles : $numberOfFiles");
     return numberOfFiles;
   }
 
+  List<String> getDateRange(filesAll){
+
+    List<String> dateFromFilename = [];
+    for (int i = 0; i < filesAll.length; i++) {
+      dateFromFilename
+          .add(filesAll[i].toString().split('/').last.substring(0, 8));
+    }
+
+    var dates_temp = dateFromFilename.toSet().toList();
+
+    var date_start = DateTime.parse(dates_temp.first);
+    var date_end = DateTime.parse(dates_temp.last);
+    var days;
+    final daysToGenerate = date_end.difference(date_start).inDays;
+    days = List.generate(daysToGenerate+1, (i) => DateTime(date_start.year, date_start.month, date_start.day + (i)));
+    days = List.generate(days.length, (i) => DateFormat('yyyyMMdd').format(days[i]));
+
+    return days;
+
+
+    return dates;
+  }
 }

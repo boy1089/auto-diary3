@@ -8,34 +8,26 @@ import 'package:auto_diary3/HomePage.dart';
 import 'package:auto_diary3/SettingPage.dart';
 
 //TODO : refactor
+//TODO : make instance of image, location then share it.
+
 
 //TODO : make new page -- enable locatio logging.
 //TODO : read location data, apply it to screen2
-
-
-
-
-//TODO : try calendar view without headers.
-
-//TODO : make scroll enabled in homepage
-//TODO : make horizontal scrollable picture in screen2.
-
-//TODO : create SQL to save th info
+//TODO : change hard coded values.
 
 //TODO : organize the info from photo -- time, location
+
+//TODO : make horizontal scrollable picture in screen2.
+
 //TODO : get location from photo
 
-//TODO : change hard coded values.
 
 //TODO : refactor -- init things to main. -- get path, get settings. create instance
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
-
   MyApp(){
-
   }
 
   @override
