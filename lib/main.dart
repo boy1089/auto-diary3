@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/home',
         routes: {
           '/home': (context) => HomePage(),
-          '/second': (context) => MyFileList(date: '202210'),
+          '/second': (context) => MyFileList(date: '20220516'),
           '/setting' : (context) => SettingPage(),
         },
         onGenerateRoute: (routeSettings) {

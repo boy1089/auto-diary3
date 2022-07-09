@@ -29,6 +29,19 @@ List<Color> kColorsForLocations = [
   Colors.deepPurpleAccent,
   Colors.deepPurpleAccent,
   Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,
+  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,
+
+
+
+
 ];
 
 const double kTimelineHeight = 600;
