@@ -1,13 +1,12 @@
 import 'dart:convert' show utf8;
-// import 'dart:html';
 import 'dart:io';
-
+import 'package:auto_diary3/util.dart';
 import 'package:df/df.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:ml_dataframe/ml_dataframe.dart';
 
+import 'package:flutter/material.dart';
 
 class Locations {
   List<int> mostFrequentLocation = [];
@@ -18,6 +17,13 @@ class Locations {
   var dates;
   var freqLocations;
   var setOfLocations;
+
+  var locations_date;
+  var df_date;
+  var index_for_plot_date;
+  var longitude_date;
+  var latitude_date ;
+  var datetime_date ;
 
   Locations() {
     print('location instance is under construction');
@@ -121,16 +127,57 @@ class Locations {
     // dates =
     return dateFromFilename.toSet().toList();
   }
-  List<dynamic> getFilefromDate(String date){
+  List<dynamic> getFileFromDate(String date){
      return filesAll.where((item) => item.toString().contains(date)).toList();
 
   }
+
+  void getLocationForDate(String date) async {
+    var fileFromDate = getFileFromDate(date);
+    var df = await readCsv2(fileFromDate[0].path);
+    df_date = df;
+    print("locations, df_date : ${df_date.toString()}");
+    // debugPrint(df_date.columnNames);
+    locations_date = 'aa';
+    // var datetimeInDf = df_date.colRecords<DateTime>('time');
+    longitude_date = df_date.colRecords<double>('longitude');
+    latitude_date = df_date.colRecords<double>('latitude');
+    datetime_date = df_date.colRecords<DateTime>('time');
+    print("locations : datetime_date : ${datetime_date.toString()}");
+    index_for_plot_date = [];
+
+    int b = 0;
+    for (int i = 0; i < ktimeline.length; i++) {
+      int a = 0;
+
+      for (int j = 0; j< datetime_date.length; j++){
+        a= a+1;
+        if (int.parse(ktimeline[i]) == datetime_date[j].hour){
+          print("time : ${datetime_date[j]},"
+              "latitude : ${latitude_date[j]},"
+              "longitude : ${longitude_date[j]}");
+          index_for_plot_date.add(j);
+          b = j;
+          break;
+        }
+      }
+      print(a);
+      print(datetime_date.length);
+      if(a == datetime_date.length) index_for_plot_date.add(b);
+
+      }
+    print("locations, index for plot date : $index_for_plot_date, "
+        "${index_for_plot_date.length} / ${ktimeline.length}");
+
+    }
+
 
   Future<DataFrame> readCsv2(String path) async {
     // var df = await readCsv(path);
     // var locations = df.colRecords<String>('address');
     // var time = df.colRecords<DateTime>('Time');
     return await readCsv(path);
+
     // return [time, locations];
   }
 }

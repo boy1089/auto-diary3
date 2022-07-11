@@ -33,9 +33,12 @@ class _MyFileList extends State<MyFileList> {
   var df_locations_hours;
   var df_locations_locations_forTimeline;
 
+  var locations;
+  var images;
   void getTimefromFilename() {
     var date = this.date.toString();
-    debugPrint('screen2 : getTimefromFilename date : $date, files : $files_images,');
+    debugPrint(
+        'screen2 : getTimefromFilename date : $date, files : $files_images,');
     // debugPrint("screen2 : getTimefromFilename : $date");
 
     files_images =
@@ -52,18 +55,6 @@ class _MyFileList extends State<MyFileList> {
     // setState(() {}); //update the UI
   }
 
-  List<String> getLocationsForTimeline(df_locations){
-    List<String> locationForTimeline = [];
-    for(int i= 0; i<ktimeline.length; i++){
-      for(int j= 0; j<df_locations_hours.length; j++){
-        if(df_locations_hours[j] == int.parse(ktimeline[i])){
-          locationForTimeline.add(df_locations.colRecords<String>('address')[j]);
-        }
-      }
-    }
-    return locationForTimeline;
-
-  }
 
   @override
   void initState() {
@@ -72,67 +63,35 @@ class _MyFileList extends State<MyFileList> {
 
   void updateStatus(dates, images, locations) async {
     this.date = dates;
+    files_images = [];
+    List<String> timesOfFiles = [];
     files_images = images.filesAll;
     getTimefromFilename();
-    debugPrint("screen2, build, files_images.length : ${files_images.length}");
-    debugPrint("screen2, build, 1");
-    debugPrint("screen2, build, $dates");
-    debugPrint("screen2, build, ${locations.getFilefromDate(dates)}");
-
-
-
-    df_locations =
-        await locations.readCsv2(locations.getFilefromDate(dates)[0].path);
-    debugPrint("screen2, build, df_location : $df_locations");
-    debugPrint(
-        "screen2, build, df_location : ${df_locations.colRecords<String>('address')}");
-    debugPrint(
-        "screen2, build, df_location : ${df_locations.colRecords<DateTime>('time')}");
-    debugPrint(
-        "screen2, build, df_location : ${List.generate(df_locations.length, (int index) => df_locations.colRecords<DateTime>('time')[index].hour)}");
-    df_locations_hours = List.generate(df_locations.length,
-        (int index) => df_locations.colRecords<DateTime>('time')[index].hour);
-    debugPrint("screen2, build, df_locations_hours : $df_locations_hours");
-    // debugPrint("screen2, build, check hour : ${cc == int.parse('10')}");
-
-    setOfLocations = df_locations.colRecords<String>('address').toSet();
-    debugPrint("screen2, build, setOfLocations : $setOfLocations");
-    // setState((){df_locations_hours = List.generate(df_locations.length,
-    //         (int index) => df_locations.colRecords<DateTime>('time')[index].hour);
-    // });
-    df_locations_locations_forTimeline = getLocationsForTimeline(df_locations);
-
-    setState((){});
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments) as Map;
     var dates = arguments.toString().split(' ')[1].substring(0, 8);
-    Images images = arguments['images'];
-    Locations locations = arguments['locations'];
+    images = arguments['images'];
+    locations = arguments['locations'];
     updateStatus(dates, images, locations);
-
-    setState(() {});
-
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: () {
           // Navigator.pushNamed(context, '/home');
-          setState(() {});
+          setState(() {debugPrint(locations.df_date);});
         }),
         appBar:
             AppBar(title: Text("$dates"), backgroundColor: Colors.redAccent),
-        body: (files_images == null || df_locations_locations_forTimeline == null)
-        // body: (files_images == null)
-
-        ? Text("Searching Files")
+        // body: (files_images == null || df_locations_locations_forTimeline == null)
+        body: (files_images == null)
+            ? Text("Searching Files")
             : Row(
                 children: [
                   SizedBox(width: kLeftGap),
-                  Column(children: [
-                    TimelineContainerList(ktimeline, df_locations_locations_forTimeline)
-                  ]),
+                  Column(children: [TimelineContainerList(ktimeline)]),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: List.generate(ktimeline.length, (index) {
@@ -144,40 +103,35 @@ class _MyFileList extends State<MyFileList> {
               ));
   }
 
-
-
-
-
-  Widget TimelineContainerList(List ktimeline, df_locations_forTimeline) {
+  Widget TimelineContainerList(List ktimeline) {
     return Column(
         children: List.generate(ktimeline.length, (index) {
-          return TimelineContainer(kTimelineWidth, kTimelineHeight / ktimeline.length,
-              index, df_locations_forTimeline);
+          return TimelineContainer(
+              kTimelineWidth, kTimelineHeight / ktimeline.length, index);
         }));
   }
 
-  Widget TimelineContainer(double width, double height, index, df_locations_forTimeline) {
+  Widget TimelineContainer(double width, double height, index) {
     var time = ktimeline[index];
-    // df_locations.colRecords<DateTime>('time')
-    //
-    // debugPrint("TimelineContainer : df_locations_hours : $df_locations_forTimeline");
-    // for (int i = 0; i< df_locations_forTimeline.length; i++){
-    //
-    // }
-    // for (int i = 0; i < ktimeline.length; i++) {debugPrint("screen2 : TimelineContainer : $i");}
-    // print("screen2 : TimeLineContainer : $df_locations");
-    // var df_locations_2 = df_locations[df_locations.colRecords<DateTime>('time').hour = int.parse(time)];
-    print("screen2 : TimeLineContainer : length of Colors : ${kColorsForLocations.length}, index : $index");
-    // var location = df_locations_2[0];
-    // debugPrint("screen2 : TimeLineContainer : Location : $location");
-    debugPrint("screen2 : TimeLineContainer : df_locations_forTimeline : $df_locations_forTimeline");
+    // df_locations.colRords<DateTime>('time').hour = int.parse(time)];
+    // print("screen2 : TimeLineContainer : length of Colors : ${kColorsForLocations.length}, index : $index");
+
+    var aa = locations.index_for_plot_date;
+    print((locations.latitude_date[aa[index]] - kLatitudeMin)*300);
+    print(((locations.longitude_date[aa[index]] - kLongitudeMin)*300/ (kLongitudeMax- kLongitudeMin)).round());
 
     return Container(
       width: width,
       height: height,
-      child: Text("$time, ${df_locations_forTimeline[index]}"),
+      child: Text("$time"),
       decoration: BoxDecoration(
-          color: kColorsForLocations[index],
+          // color: Colors.red,
+          color : Color.fromARGB(150, ((locations.latitude_date[aa[index]] - kLatitudeMin)*400).round(),
+              200,
+              ((locations.longitude_date[aa[index]] - kLongitudeMin)*400).round()
+              ),
+          // // Color.fromARGB(
+          //     min(255, int.parse(numberOfFiles) * 3), 200, 100, 100),
           shape: BoxShape.rectangle,
           borderRadius: index == 0
               ? BorderRadius.only(
@@ -187,39 +141,30 @@ class _MyFileList extends State<MyFileList> {
   }
 
   Widget ImageRow(String time, List<File> fileList, List<String> times) {
-    // print(fileList);
-    // print(times);
     var indexOfImagewithSpecificTime = [];
 
     for (int i = 0; i < times.length; i++) {
       if (times[i].startsWith(time)) {
         indexOfImagewithSpecificTime.add(i);
-        debugPrint(
-            'screen2, ImageRow, time : $time, $i / ${times.length} , ${times[i]} added');
 
-        debugPrint(
-            'screen2, ImageRow, fileList : $fileList');
       }
     }
 
-    debugPrint("screen2 : ImageRow : indexOfImage : $indexOfImagewithSpecificTime");
 
     return Row(
-        children: indexOfImagewithSpecificTime==null
+        children : indexOfImagewithSpecificTime.length != 0
             ? List.generate(indexOfImagewithSpecificTime.length, (index) {
-          // return Image.file(fileList[list[index]],
+          debugPrint("time, $time, row created");
           return Image.file(
             fileList[indexOfImagewithSpecificTime[index]],
             height: kImageHeight,
             width: kImageWidth,
-          );
-        })
-            : [SizedBox(height: kImageHeight)]);
+          );})
+            : [SizedBox(height : kImageHeight)]);
+
+
+
+
   }
-
-
-
-
-
 
 }

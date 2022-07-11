@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
     var date = 'null';
     if (text != null) {
       date = text.substring(4, 8);
-      print('date : $date');
     }
     var color = '2F1BDB';
     return Container(
@@ -78,6 +77,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("$date, $numberOfFiles,$location",
                   style: TextStyle(fontSize: 8)),
               onPressed: () {
+                locations.getLocationForDate(text);
                 Navigator.pushNamed(context, '/second', arguments: {
                   'date': text,
                   'images': images,
@@ -109,10 +109,10 @@ class _HomePageState extends State<HomePage> {
                     itemCount: images.datesRange.length,
                     // itemCount: 2,
                     itemBuilder: (context, index) {
-                      debugPrint(
-                          "HomePage, itembuilder, index : $index / ${images.datesRange.length}, image.dates : ${images.datesRange[index]}");
-                      debugPrint(
-                          "HomePage, itembuilder, i_imagej : $i_image, image.dates : ${images.dates[i_image]}");
+                      // debugPrint(
+                      //     "HomePage, itembuilder, index : $index / ${images.datesRange.length}, image.dates : ${images.datesRange[index]}");
+                      // debugPrint(
+                      //     "HomePage, itembuilder, i_imagej : $i_image, image.dates : ${images.dates[i_image]}");
                       var button = Button(
                         images.datesRange[index] == images.dates[i_image]
                             ? images.dates[i_image]

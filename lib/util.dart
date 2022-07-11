@@ -39,10 +39,13 @@ List<Color> kColorsForLocations = [
   Colors.deepPurpleAccent,  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,
   Colors.deepPurpleAccent,  Colors.deepPurpleAccent,  Colors.deepPurpleAccent,
 
-
-
-
 ];
+
+const kLatitudeMin = 33.266724;
+const kLatitudeMax = 38.569303;
+const kLongitudeMin = 125.883528;
+const kLongitudeMax = 130.883159;
+
 
 const double kTimelineHeight = 600;
 const double kTimelineWidth = 10;
