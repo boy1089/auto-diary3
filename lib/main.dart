@@ -10,6 +10,7 @@ import 'package:auto_diary3/SettingPage.dart';
 //TODO : refactor
 //TODO : make instance of image, location then share it.
 
+//TODO : bug fix on homepage.
 
 //TODO : make new page -- enable locatio logging.
 //TODO : read location data, apply it to screen2

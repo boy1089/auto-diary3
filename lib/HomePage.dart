@@ -5,7 +5,6 @@ import 'package:auto_diary3/Images.dart';
 import 'dart:math';
 import 'package:auto_diary3/Locations.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -79,19 +78,17 @@ class _HomePageState extends State<HomePage> {
               child: Text("$date, $numberOfFiles,$location",
                   style: TextStyle(fontSize: 8)),
               onPressed: () {
-                Navigator.pushNamed(context, '/second',
-                    arguments: {'date': text,
-                                'images': images,
-                                'locations' : locations});
+                Navigator.pushNamed(context, '/second', arguments: {
+                  'date': text,
+                  'images': images,
+                  'locations': locations
+                });
               },
             ),
     );
   }
 
-
-
   Widget build(BuildContext context) {
-
     int i_image = 0;
     int i_location = 0;
     return MaterialApp(
@@ -112,8 +109,10 @@ class _HomePageState extends State<HomePage> {
                     itemCount: images.datesRange.length,
                     // itemCount: 2,
                     itemBuilder: (context, index) {
-                      debugPrint("HomePage, itembuilder, index : $index / ${images.datesRange.length}, image.dates : ${images.datesRange[index]}");
-                      debugPrint("HomePage, itembuilder, i_imagej : $i_image, image.dates : ${images.dates[i_image]}");
+                      debugPrint(
+                          "HomePage, itembuilder, index : $index / ${images.datesRange.length}, image.dates : ${images.datesRange[index]}");
+                      debugPrint(
+                          "HomePage, itembuilder, i_imagej : $i_image, image.dates : ${images.dates[i_image]}");
                       var button = Button(
                         images.datesRange[index] == images.dates[i_image]
                             ? images.dates[i_image]
@@ -132,7 +131,8 @@ class _HomePageState extends State<HomePage> {
                         i_image += 1;
                       }
 
-                      if (images.datesRange[index] == locations.dates[i_location]) {
+                      if (images.datesRange[index] ==
+                          locations.dates[i_location]) {
                         // print('dates_Date and date_location is matched! $index, $i_location,  ${images.dates[index]}, ${locations.dates[i_location]}');
                         // print(dates_dates[index]==locations.dates[i_image]);
                         i_location += 1;
@@ -159,7 +159,8 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             // images.printStatus();
             locations.printStatus();
-            print("images.dateRange.last : ${images.datesRange.last}, ${images.datesRange.length}");
+            print(
+                "images.dateRange.last : ${images.datesRange.last}, ${images.datesRange.length}");
             // locations.printStatus();
           });
           // images.convertPngToJpg();

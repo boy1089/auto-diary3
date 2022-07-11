@@ -53,7 +53,6 @@ class _MyFileList extends State<MyFileList> {
   }
 
   List<String> getLocationsForTimeline(df_locations){
-
     List<String> locationForTimeline = [];
     for(int i= 0; i<ktimeline.length; i++){
       for(int j= 0; j<df_locations_hours.length; j++){
@@ -62,7 +61,6 @@ class _MyFileList extends State<MyFileList> {
         }
       }
     }
-
     return locationForTimeline;
 
   }
@@ -80,6 +78,8 @@ class _MyFileList extends State<MyFileList> {
     debugPrint("screen2, build, 1");
     debugPrint("screen2, build, $dates");
     debugPrint("screen2, build, ${locations.getFilefromDate(dates)}");
+
+
 
     df_locations =
         await locations.readCsv2(locations.getFilefromDate(dates)[0].path);
@@ -101,7 +101,6 @@ class _MyFileList extends State<MyFileList> {
     //         (int index) => df_locations.colRecords<DateTime>('time')[index].hour);
     // });
     df_locations_locations_forTimeline = getLocationsForTimeline(df_locations);
-
 
     setState((){});
   }
