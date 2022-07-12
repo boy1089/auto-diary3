@@ -142,7 +142,6 @@ class _MyFileList extends State<MyFileList> {
 
   Widget ImageRow(String time, List<File> fileList, List<String> times) {
     var indexOfImagewithSpecificTime = [];
-
     for (int i = 0; i < times.length; i++) {
       if (times[i].startsWith(time)) {
         indexOfImagewithSpecificTime.add(i);
